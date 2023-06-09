@@ -19,12 +19,14 @@ function s.initial_effect(c)
 	--Change Tuner Level to 2
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetCategory(CATEGORY_LVCHANGE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
+	e2:SetCountLimit(1,{id,1})
 	e2:SetTarget(s.target)
-	e2:SetOperation(s.operation)
+	e2:SetOperation(s.lvop)
 	c:RegisterEffect(e2)
 end
 --Special Summon Tuner
@@ -55,7 +57,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,0,1,99,nil)
 end
-function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.lvop(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
@@ -63,7 +65,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp,chk)
     e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetCode(EFFECT_CHANGE_LEVEL)
 	e3:SetValue(2)
-	e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 	tc:RegisterEffect(e3)
 	end
 end
